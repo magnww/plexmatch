@@ -61,4 +61,8 @@ func TestMatchTitle(t *testing.T) {
 	if ti != "[ANi] 虛構推理 第二季 -  [1080P][Baha][WEB-DL][AAC AVC][CHT]" {
 		t.Errorf("title test 1 failed")
 	}
+	ti2 := removeNumber("[Nekomoe kissaten][NieR Automata Ver1.1a][03][1080p][CHS]", epRegexList)
+	if ti2 != "[Nekomoe kissaten][NieR Automata Ver1.1a][1080p][CHS]" {
+		t.Errorf("title test 2 failed")
+	}
 }

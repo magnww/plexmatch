@@ -156,7 +156,7 @@ func removeNumber(name string, regexpList []*regexp.Regexp) string {
 					num = convertChineseNumber(match[1])
 				}
 				if num > 0 {
-					return name[:matchIndexes[i][2]] + name[matchIndexes[i][3]:]
+					return name[:matchIndexes[i][0]] + name[matchIndexes[i][1]:]
 				}
 			}
 		}
