@@ -18,8 +18,9 @@ var (
 	cpuprofile = flag.String("cpu-profile", "", "write cpu profile to file")
 	dir        = flag.String("dir", "", "")
 
-	seRegexList []*regexp.Regexp
-	epRegexList []*regexp.Regexp
+	seRegexList     []*regexp.Regexp
+	epRegexList     []*regexp.Regexp
+	ignoreRegexList []*regexp.Regexp
 
 	chineseNumbers = map[string]int64{
 		"一": 1,
@@ -67,6 +68,7 @@ func ParseRegex() {
 
 	seRegexList = scanRegexpFile(path.Join(workPath, "session.txt"))
 	epRegexList = scanRegexpFile(path.Join(workPath, "episode.txt"))
+	ignoreRegexList = scanRegexpFile(path.Join(workPath, "ignore.txt"))
 }
 
 func scanRegexpFile(filepath string) []*regexp.Regexp {
@@ -98,6 +100,7 @@ func Detect(dir string) {
 	builder := &strings.Builder{}
 
 	title := removeNumber(path.Base(dir), epRegexList)
+	title = removeIgnore(title, ignoreRegexList)
 	log.Printf("title: %s", title)
 	builder.WriteString(fmt.Sprintf("title: %s\n", title))
 
@@ -160,6 +163,13 @@ func removeNumber(name string, regexpList []*regexp.Regexp) string {
 				}
 			}
 		}
+	}
+	return name
+}
+
+func removeIgnore(name string, regexpList []*regexp.Regexp) string {
+	for _, regex := range regexpList {
+		name = regex.ReplaceAllString(name, "")
 	}
 	return name
 }
