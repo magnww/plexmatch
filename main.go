@@ -144,6 +144,9 @@ func match(name string, regexpList []*regexp.Regexp) int {
 				}
 			}
 		}
+		if num > 0 {
+			break
+		}
 	}
 	return int(num)
 }
